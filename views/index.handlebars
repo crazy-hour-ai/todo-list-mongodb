@@ -2,7 +2,7 @@
 <ul>
   {{#each todos}}
   <li>{{{this.name}}}
-    <a href="#">details</a>
+    <a href="/todos/{{{this._id}}}">details</a>
     <a href="#">edit</a>
     <button>delete</button>
   </li>

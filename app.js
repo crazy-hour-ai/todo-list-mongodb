@@ -56,7 +56,14 @@ app.get('/todos/new', (req, res) => {
 
 // 顯示一筆 Todo 的詳細內容
 app.get('/todos/:id', (req, res) => {
-  res.send('顯示 Todo 的詳細內容')
+  // res.send('顯示 Todo 的詳細內容')
+  Todo.findById(req.params.id)
+    .lean()
+    .exec((err, todos) => {
+      if (err)
+        return console.log(err);
+      return res.render('details', { todo: todos })
+    })
 })
 
 // 新增一筆  Todo

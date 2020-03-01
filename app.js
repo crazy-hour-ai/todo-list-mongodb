@@ -84,12 +84,33 @@ app.post('/todos', (req, res) => {
 
 // 顯示修改 Todo 頁面
 app.get('/todos/:id/edit', (req, res) => {
-  res.send('修改 Todo 頁面')
+  // res.send('修改 Todo 頁面')
+  Todo.findById(req.params.id)
+    .lean()
+    .exec((err, todoEdit) => {
+      if (err)
+        return console.log(err);
+      return res.render('edit', { todo: todoEdit })
+    })
 })
 // 修改 Todo
 app.post('/todos/:id/edit', (req, res) => {
-  res.send('修改 Todo')
+  // res.send('修改 Todo')
+  Todo.findById(req.params.id, (err, todo) => {
+    if (err)
+      return console.log(err);
+    todo.name = req.body.name;
+
+    todo.save((err) => {
+      if (err)
+        return console.log(err);
+      return res.redirect(`/todos/${req.params.id}`);
+    })
+  })
+
 })
+
+
 // 刪除 Todo
 app.post('/todos/:id/delete', (req, res) => {
   res.send('刪除 Todo')

@@ -3,7 +3,7 @@
   {{#each todos}}
   <li>{{{this.name}}}
     <a href="/todos/{{{this._id}}}">details</a>
-    <a href="#">edit</a>
+    <a href="/todos/{{{this._id}}}/edit">edit</a>
     <button>delete</button>
   </li>
   {{/each}}

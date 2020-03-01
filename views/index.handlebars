@@ -4,7 +4,9 @@
   <li>{{{this.name}}}
     <a href="/todos/{{{this._id}}}">details</a>
     <a href="/todos/{{{this._id}}}/edit">edit</a>
-    <button>delete</button>
+    <form action="/todos/{{{this._id}}}/delete" method="post">
+      <button type="submit">delete</button>
+    </form>
   </li>
   {{/each}}
 </ul>

@@ -27,6 +27,8 @@ db.once('open', () => {
 })
 
 
+
+
 // 設定路由
 // Todo 首頁
 app.get('/', (req, res) => {
@@ -82,6 +84,7 @@ app.post('/todos', (req, res) => {
 
 
 
+
 // 顯示修改 Todo 頁面
 app.get('/todos/:id/edit', (req, res) => {
   // res.send('修改 Todo 頁面')
@@ -96,12 +99,12 @@ app.get('/todos/:id/edit', (req, res) => {
 // 修改 Todo
 app.post('/todos/:id/edit', (req, res) => {
   // res.send('修改 Todo')
-  Todo.findById(req.params.id, (err, todo) => {
+  Todo.findById(req.params.id, (err, todoEditById) => {
     if (err)
       return console.log(err);
-    todo.name = req.body.name;
+    todoEditById.name = req.body.name;
 
-    todo.save((err) => {
+    todoEditById.save((err) => {
       if (err)
         return console.log(err);
       return res.redirect(`/todos/${req.params.id}`);
@@ -111,14 +114,26 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 
+
+
 // 刪除 Todo
 app.post('/todos/:id/delete', (req, res) => {
-  res.send('刪除 Todo')
+  // res.send('刪除 Todo')
+  Todo.findById(req.params.id, (err, todoDelete) => {
+    if (err)
+      return console.log(err);
+
+    todoDelete.remove((err) => {
+      if (err)
+        return console.log(err);
+      return res.redirect('/');
+    })
+  })
 })
+
 
 
 
 app.listen(PORT, () => {
   console.log(`App is running at http://localhost:${PORT}`)
-
 })

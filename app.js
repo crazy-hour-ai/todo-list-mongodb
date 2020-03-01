@@ -30,12 +30,21 @@ db.once('open', () => {
 // Todo 首頁
 app.get('/', (req, res) => {
   // res.send('hello world');
-  res.render('index')
+  // res.render('index')
+  Todo.find()
+    .lean()
+    .find((err, todos) => {
+      if (err) {
+        return console.log(err);
+      }
+      return res.render('index', { todos: todos });
+    })
 })
 
 // 列出全部 Todo
 app.get('/todos', (req, res) => {
-  res.send('列出所有 Todo');
+  return res.redirect('/');
+  // res.send('列出所有 Todo');
 })
 
 // 新增一筆 Todo 頁面

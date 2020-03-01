@@ -1,7 +1,11 @@
 const express = require('express');
-const app = express();
+const exphbs = require('express-handlebars');
 
+const app = express();
 const PORT = 3000;
+
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars');
 
 const mongoose = require('mongoose')                    // 載入 mongoose
 mongoose.connect('mongodb://localhost:27017/todo', { useNewUrlParser: true, useUnifiedTopology: true })   // 設定連線到 mongoDB
@@ -10,6 +14,7 @@ mongoose.connect('mongodb://localhost:27017/todo', { useNewUrlParser: true, useU
 const db = mongoose.connection;
 
 const Todo = require('./models/todo');
+
 
 // 連線異常
 db.on('error', () => {
@@ -24,7 +29,8 @@ db.once('open', () => {
 // 設定路由
 // Todo 首頁
 app.get('/', (req, res) => {
-  res.send('hello world');
+  // res.send('hello world');
+  res.render('index')
 })
 
 // 列出全部 Todo

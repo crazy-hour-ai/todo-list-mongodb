@@ -1,20 +1,20 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 3000;
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const mongoose = require('mongoose')                    // 載入 mongoose
 mongoose.connect('mongodb://localhost:27017/todo', { useNewUrlParser: true, useUnifiedTopology: true })   // 設定連線到 mongoDB
 
 // mongoose 連線後透過 mongoose.connection 拿到 Connection 的物件
 const db = mongoose.connection;
-
 const Todo = require('./models/todo');
-
 
 // 連線異常
 db.on('error', () => {
@@ -25,6 +25,7 @@ db.on('error', () => {
 db.once('open', () => {
   console.log('mongodb connected');
 })
+
 
 // 設定路由
 // Todo 首頁
@@ -49,16 +50,31 @@ app.get('/todos', (req, res) => {
 
 // 新增一筆 Todo 頁面
 app.get('/todos/new', (req, res) => {
-  res.send('新增 Todo 頁面')
+  return res.render('new');
+  // res.send('新增 Todo 頁面')
 })
+
 // 顯示一筆 Todo 的詳細內容
 app.get('/todos/:id', (req, res) => {
   res.send('顯示 Todo 的詳細內容')
 })
+
 // 新增一筆  Todo
 app.post('/todos', (req, res) => {
-  res.send('建立 Todo')
+  // res.send('建立 Todo')
+  const todo = new Todo({
+    name: req.body.name,
+  })
+  todo.save(err => {
+    // console.log(err); err return null = no error
+    if (err)
+      return console.log(err);
+    return res.redirect('/');
+  })
 })
+
+
+
 // 顯示修改 Todo 頁面
 app.get('/todos/:id/edit', (req, res) => {
   res.send('修改 Todo 頁面')
@@ -71,6 +87,8 @@ app.post('/todos/:id/edit', (req, res) => {
 app.post('/todos/:id/delete', (req, res) => {
   res.send('刪除 Todo')
 })
+
+
 
 app.listen(PORT, () => {
   console.log(`App is running at http://localhost:${PORT}`)

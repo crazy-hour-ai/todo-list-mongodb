@@ -104,6 +104,13 @@ app.post('/todos/:id/edit', (req, res) => {
       return console.log(err);
     todoEditById.name = req.body.name;
 
+    if (req.body.done === 'on') {
+      todoEditById.done = true;
+    }
+    else {
+      todoEditById.done = false;
+    }
+
     todoEditById.save((err) => {
       if (err)
         return console.log(err);

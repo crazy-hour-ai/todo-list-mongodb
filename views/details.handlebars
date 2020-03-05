@@ -1,6 +1,9 @@
 <h2>details</h2>
 
-<p>{{{todo.name}}}</p>
+<p>
+  <input type="checkbox" {{#if todo.done}} checked {{/if}} disabled>
+  {{{todo.name}}}
+</p>
 
 <a href="/">back</a>
 <a href="/todos/{{{todo._id}}}/edit"> edit</a>

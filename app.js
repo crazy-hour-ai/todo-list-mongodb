@@ -35,6 +35,7 @@ app.get('/', (req, res) => {
   // res.send('hello world');
   // res.render('index')
   Todo.find()
+    .sort({ name: 'asc' })
     .lean()
     .find((err, todos) => {
       if (err) {

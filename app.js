@@ -13,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 設定 method-override
 app.use(methodOverride('_method'));
 
+const session = require('express-session');
+
 const mongoose = require('mongoose')                    // 載入 mongoose
 mongoose.connect('mongodb://localhost:27017/todo', { useNewUrlParser: true, useUnifiedTopology: true })   // 設定連線到 mongoDB
 
@@ -30,10 +32,15 @@ db.once('open', () => {
   console.log('mongodb connected');
 })
 
-
 app.use('/', require('./routes/home'));
 app.use('/todos', require('./routes/todo'));
 app.use('/users', require('./routes/user'));
+
+app.use(session({
+  secret: "your secret key",
+  resave: false,
+  saveUninitialized: true
+}))
 
 app.listen(PORT, () => {
   console.log(`App is running at http://localhost:${PORT}`)

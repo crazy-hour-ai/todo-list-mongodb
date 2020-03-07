@@ -4,14 +4,19 @@ const router = express.Router();
 
 const User = require('../models/user');
 
+const passport = require('passport');
+
 //login page
 router.get('/login', (req, res) => {
   res.render('login');
 })
 
 //login check
-router.post('/login', (req, res) => {
-  res.send('login');
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', { // 使用 passport 認證
+    successRedirect: '/', // 登入成功會回到根目錄
+    failureRedirect: '/users/login' // 失敗會留在登入頁面
+  })(req, res, next)
 })
 
 //register page

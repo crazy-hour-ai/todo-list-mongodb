@@ -2,21 +2,23 @@ const express = require('express');
 const router = express.Router();
 const Todo = require('../models/todo');
 
+// destructuring assignment 的寫法
+const { authenticated } = require('../config/auth');
 
 // 列出全部 Todo
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   return res.redirect('/');
   // res.send('列出所有 Todo');
 })
 
 // 新增一筆 Todo 頁面
-router.get('/new', (req, res) => {
+router.get('/new', authenticated, (req, res) => {
   return res.render('new');
   // res.send('新增 Todo 頁面')
 })
 
 // 顯示一筆 Todo 的詳細內容
-router.get('/:id', (req, res) => {
+router.get('/:id', authenticated, (req, res) => {
   // res.send('顯示 Todo 的詳細內容')
   Todo.findById(req.params.id)
     .lean()
@@ -28,7 +30,7 @@ router.get('/:id', (req, res) => {
 })
 
 // 新增一筆  Todo
-router.post('', (req, res) => {
+router.post('', authenticated, (req, res) => {
   // res.send('建立 Todo')
   const todo = new Todo({
     name: req.body.name,
@@ -45,7 +47,7 @@ router.post('', (req, res) => {
 
 
 // 顯示修改 Todo 頁面
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', authenticated, (req, res) => {
   // res.send('修改 Todo 頁面')
   Todo.findById(req.params.id)
     .lean()
@@ -56,7 +58,7 @@ router.get('/:id/edit', (req, res) => {
     })
 })
 // 修改 Todo
-router.put('/:id/edit', (req, res) => {
+router.put('/:id/edit', authenticated, (req, res) => {
   // res.send('修改 Todo')
   Todo.findById(req.params.id, (err, todoEditById) => {
     if (err)
@@ -83,7 +85,7 @@ router.put('/:id/edit', (req, res) => {
 
 
 // 刪除 Todo
-router.delete('/:id/delete', (req, res) => {
+router.delete('/:id/delete', authenticated, (req, res) => {
   // res.send('刪除 Todo')
   Todo.findById(req.params.id, (err, todoDelete) => {
     if (err)

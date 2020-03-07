@@ -3,9 +3,11 @@ const express = require('express');
 const router = express.Router();
 const Todo = require('../models/todo');
 
+const { authenticated } = require('../config/auth');
+
 // 設定路由
 // Todo 首頁
-router.get('/', (req, res) => {
+router.get('/', authenticated, (req, res) => {
   // res.send('hello world');
   // res.render('index')
   Todo.find()
